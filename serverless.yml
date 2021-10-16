@@ -1,0 +1,28 @@
+service:
+  name: leve-menina-sls
+
+plugins:
+  - serverless-bundle
+  - serverless-pseudo-parameters
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 256
+  region: sa-east-1
+  stage: ${opt:stage, 'dev'}
+  iamRoleStatements:
+    - ${file(iam/sendMailIAM.yml):sendMailIAM}
+
+functions:
+  sendMail:
+    handler: src/handlers/sendMail.handler
+    events:
+      - http:
+          method: POST
+          path: /send
+    cors: true
+
+custom:
+  bundle:
+    linting: false #é desaconselhável usar esse parâmetro como false
