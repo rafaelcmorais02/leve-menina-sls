@@ -7,9 +7,9 @@ async function sendMail(event, context) {
 
   const body = `A pessoa ${data.message.nome} do telefone ${data.message.telefone} pediu o item ${data.message.id}`
   const params = {
-    Source: "rafaelcmorais02@gmail.com",
+    Source: "levemenina27@gmail.com",
     Destination: {
-      ToAddresses: ["emillie.sara1@hotmail.com"]
+      ToAddresses: ["levemenina27@gmail.com"]
     },
     Message: {
       Body: {
