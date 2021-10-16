@@ -21,7 +21,7 @@ functions:
       - http:
           method: POST
           path: /send
-    cors: true
+          cors: true
 
 custom:
   bundle:
