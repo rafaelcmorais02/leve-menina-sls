@@ -8,9 +8,9 @@ async function sendMailQueue(event, context) {
 
     const data = JSON.parse(record.body)
 
-    const { message: { nome, telefone, id } } = data
+    const { message: { nome, telefone, title } } = data
 
-    const body = `A pessoa ${nome} do telefone ${telefone} pediu o item ${id}`
+    const body = `A pessoa ${nome} do telefone ${telefone} pediu o item de título: ${title}`
 
     const params = {
         Source: "levemenina27@gmail.com",

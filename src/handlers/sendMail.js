@@ -7,9 +7,9 @@ async function sendMail(event, context) {
 
   const data = JSON.parse(event.body)
 
-  const { message: { nome, telefone, id } } = data
+  const { message: { nome, telefone, title } } = data
 
-  if ((nome) && (telefone)) {
+  if ((nome) && (telefone) && (title)) {
 
     try {
       await sqs.sendMessage({
