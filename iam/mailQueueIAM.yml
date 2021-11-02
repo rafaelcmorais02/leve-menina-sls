@@ -2,4 +2,5 @@ MailQueueIAM:
   Effect: Allow
   Action:
     - sqs:RecieveMessage
+    - sqs:SendMessage
   Resource: ${self:custom.mailQueue.arn}

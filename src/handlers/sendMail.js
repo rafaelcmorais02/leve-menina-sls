@@ -1,7 +1,9 @@
 import AWS from "aws-sdk"
-const ses = new AWS.SES({ region: "sa-east-1" })
+const sqs = new AWS.SQS()
 
 async function sendMail(event, context) {
+
+  console.log(process.env.MAIL_QUEUE_URL)
 
   const data = JSON.parse(event.body)
 
@@ -9,40 +11,24 @@ async function sendMail(event, context) {
 
   if ((nome) && (telefone)) {
 
-    const body = `A pessoa ${nome} do telefone ${telefone} pediu o item ${id}`
-
-    const params = {
-      Source: "levemenina27@gmail.com",
-      Destination: {
-        ToAddresses: ["levemenina27@gmail.com", "rafaelcmorais02@gmail.com"]
-      },
-      Message: {
-        Body: {
-          Text: {
-            Data: body
-          }
-
-        },
-        Subject: {
-          Data: "Interesse de compra"
-        },
-      }
-    }
     try {
-      await ses.sendEmail(params).promise()
+      await sqs.sendMessage({
+        QueueUrl: process.env.MAIL_QUEUE_URL,
+        MessageBody: event.body
+      }).promise()
+
       return {
         statusCode: 200,
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Credentials': true,
         },
-        body: JSON.stringify(data),
+        body: event.body,
       };
     } catch (error) {
       console.error(error)
     }
-  }
-  else {
+  } else {
     return {
       statusCode: 400,
       headers: {
@@ -53,6 +39,7 @@ async function sendMail(event, context) {
     }
   }
 }
+
 
 export const handler = sendMail;
 

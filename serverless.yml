@@ -14,6 +14,8 @@ provider:
   iamRoleStatements:
     - ${file(iam/sendMailIAM.yml):sendMailIAM}
     - ${file(iam/mailQueueIAM.yml):MailQueueIAM}
+  environment:
+    MAIL_QUEUE_URL: ${self:custom.mailQueue.url}
 
 resources:
   Resources:
@@ -39,5 +41,6 @@ custom:
   mailQueue:
     name: MailQueue-${self:provider.stage}
     arn: !GetAtt MailQueue.Arn
+    url: !Ref MailQueue
   bundle:
     linting: false #é desaconselhável usar esse parâmetro como false
