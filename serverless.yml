@@ -13,8 +13,20 @@ provider:
   stage: ${opt:stage, 'dev'}
   iamRoleStatements:
     - ${file(iam/sendMailIAM.yml):sendMailIAM}
+    - ${file(iam/mailQueueIAM.yml):MailQueueIAM}
+
+resources:
+  Resources:
+    MailQueue: ${file(resources/mailQueue.yml):MailQueue}
 
 functions:
+  sendMailQueue:
+    handler: src/handlers/sendMailQueue.handler
+    events:
+      - sqs:
+          arn: ${self:custom.mailQueue.arn}
+          batchSize: 1
+
   sendMail:
     handler: src/handlers/sendMail.handler
     events:
@@ -24,5 +36,8 @@ functions:
           cors: true
 
 custom:
+  mailQueue:
+    name: MailQueue-${self:provider.stage}
+    arn: !GetAtt MailQueue.Arn
   bundle:
     linting: false #é desaconselhável usar esse parâmetro como false
